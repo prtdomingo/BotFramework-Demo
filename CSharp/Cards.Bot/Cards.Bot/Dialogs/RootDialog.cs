@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
+using Cards.Bot.Helpers;
 
 namespace Cards.Bot.Dialogs
 {
@@ -25,6 +26,7 @@ namespace Cards.Bot.Dialogs
         {
             // Creates a Card within a dialog
             var replyToConversation = context.MakeMessage();
+            replyToConversation.Speak = SpeechHelper.Speak("<s>Hi, welcome to Visual Card Bot. What can I do <break strength=\"weak\"/> for you?</s>");
 
             // Converts the card into an Attachment object and add it to Attachments list
             replyToConversation.Attachments.Add(CreateGreetingsCard());
@@ -47,7 +49,7 @@ namespace Cards.Bot.Dialogs
                     break;
                 default:
                     await context.PostAsync("Please select either Standard Card or Adaptive Card to proceed");
-                    await MessageReceivedStart(context, result);
+                    context.Wait(MessageReceivedStart);
                     break;
             }
         }

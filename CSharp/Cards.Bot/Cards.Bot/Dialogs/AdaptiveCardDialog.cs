@@ -8,6 +8,7 @@ using Microsoft.Bot.Connector;
 using AdaptiveCards;
 using Newtonsoft.Json;
 using Cards.Bot.Models;
+using Cards.Bot.Helpers;
 
 namespace Cards.Bot.Dialogs
 {
@@ -48,6 +49,7 @@ namespace Cards.Bot.Dialogs
                 Content = card
             };
             message.Attachments.Add(attachment);
+            message.Speak = SpeechHelper.Speak("Unfortunately, <break strength=\"weak\"/> both <emphasis level=\"strong\">Input Form card</emphasis> and <sub alias=\"Visual Studio Team Services\">VSTS</sub> card is not yet supported for me.");
 
             await context.PostAsync(message);
 
@@ -77,15 +79,20 @@ namespace Cards.Bot.Dialogs
                 await context.PostAsync("Closing the bug now...");
             }
 
+            context.Wait(ContinueChoicePrompt);
+        }
+
+        public async Task ContinueChoicePrompt(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
             PromptDialog.Choice(context,
-              ContinueChoicePrompt,
+              ContinueChoicePromptConfirm,
               new string[] { "Yes", "No" },
               "Do you stil want to look at the other adaptive cards?",
               "Select Yes or No only",
               3);
         }
 
-        public async Task ContinueChoicePrompt(IDialogContext context, IAwaitable<string> result)
+        public async Task ContinueChoicePromptConfirm(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
             if (message.ToLower() == "yes")

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
+using Cards.Bot.Helpers;
 
 namespace Cards.Bot.Dialogs
 {
@@ -37,6 +38,7 @@ namespace Cards.Bot.Dialogs
         {
             var userChoice = await result;
             var message = context.MakeMessage();
+            message.Speak = SpeechHelper.Speak($"You've currently selected <emphasis level=\"strong\">{userChoice}</emphasis>");
 
             if (userChoice.ToLower() == "carousel card")
             {
@@ -51,15 +53,20 @@ namespace Cards.Bot.Dialogs
 
             await context.PostAsync(message);
 
+            context.Wait(ContinueStandardCard);
+        }
+
+        public async Task ContinueStandardCard(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
             PromptDialog.Choice(context,
-                ContinueStandardCard,
+                ContinueStandardCardConfirm,
                 new string[] { "Yes", "No" },
                 "Do you stil want to look at the other standard cards?",
                 "Select Yes or No only",
                 3);
         }
 
-        public async Task ContinueStandardCard(IDialogContext context, IAwaitable<string> result)
+        public async Task ContinueStandardCardConfirm(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
             if(message.ToLower() == "yes")
