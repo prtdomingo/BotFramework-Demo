@@ -15,7 +15,7 @@ namespace Cards.Bot.Dialogs
     [Serializable]
     public class AdaptiveCardDialog : IDialog<object>
     {
-        private const string InputFormCard = "InputForm card";
+        private const string InputFormCard = "Form card";
         private const string VSTSCard = "VSTS card";
         private IEnumerable<string> ChoiceOptions = new List<string> { InputFormCard, VSTSCard };
         private static string _cardChoice = "";
@@ -49,7 +49,14 @@ namespace Cards.Bot.Dialogs
                 Content = card
             };
             message.Attachments.Add(attachment);
-            message.Speak = SpeechHelper.Speak("Unfortunately, <break strength=\"weak\"/> both <emphasis level=\"strong\">Input Form card</emphasis> and <sub alias=\"Visual Studio Team Services\">VSTS</sub> card is not yet supported for me.");
+
+            // If channel is Cortana
+            if (context.Activity.ChannelId == "cortana")
+                message.Speak = SpeechHelper.Speak("Unfortunately, <break strength=\"weak\"/> both <emphasis level=\"strong\">Input Form card</emphasis> and <sub alias=\"Visual Studio Team Services\">VSTS</sub> card is not yet supported for me.");
+            else
+                message.Speak = (_cardChoice == VSTSCard ? SpeechHelper.Speak("You've selected Visual Studio Team Services Card") :
+                    SpeechHelper.Speak("You've selected Input Form Card"));
+
 
             await context.PostAsync(message);
 
