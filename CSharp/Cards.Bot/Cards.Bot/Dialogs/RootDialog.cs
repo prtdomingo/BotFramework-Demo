@@ -22,46 +22,12 @@ namespace Cards.Bot.Dialogs
         private async Task MessageReceivedStart(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             // Creates a Card within a dialog
-            Activity replyToConversation = (Activity)context.MakeMessage();
-            //replyToConversation.AttachmentLayout = AttachmentLayoutTypes.List;
-            replyToConversation.Attachments = new List<Attachment>();
-
-            // creates a card image 
-            var cardImages = new List<CardImage>
-            {
-                new CardImage
-                {
-                    Url = "http://adaptivecards.io/api/cat"
-                }
-            };
-
-            // creates button that will be used for the hero card
-            var cardButtons = new List<CardAction>
-            {
-                new CardAction
-                {
-                    Title = "Standard Cards",
-                    Value = StandardCard
-                },
-                new CardAction
-                {
-                    Title = "Adaptive Cards",
-                    Value = AdaptiveCard
-                }
-            };
-
-            // creates the hero card and attach the cardImages and cardButtons we've just created
-            var heroCard = new HeroCard
-            {
-                Title = "I'm a Visual Card Bot",
-                Subtitle = "What's up? What do you want to do?",
-                Images = cardImages,
-                Buttons = cardButtons
-            };
+            var replyToConversation = context.MakeMessage();
 
             // Converts the card into an Attachment object and add it to Attachments list
-            replyToConversation.Attachments.Add(heroCard.ToAttachment());
+            replyToConversation.Attachments.Add(CreateGreetingsCard());
             await context.PostAsync(replyToConversation);
+
             context.Wait(MessageReceivedAsync);
         }
 
@@ -85,7 +51,25 @@ namespace Cards.Bot.Dialogs
 
         private async Task MessageReceivedDone(IDialogContext context, IAwaitable<object> result)
         {
-            context.Wait(MessageReceivedStart);
+            await MessageReceivedStart(context, null);
+        }
+
+        private static Attachment CreateGreetingsCard()
+        {
+            return new HeroCard
+            {
+                Title = "I'm a Visual Card Bot",
+                Subtitle = "What's up? What do you want to do?",
+                Images = new List<CardImage>
+                {
+                    new CardImage { Url = "http://adaptivecards.io/api/cat" }
+                },
+                Buttons = new List<CardAction>
+                {
+                    new CardAction { Title = "Standard Cards", Value = StandardCard },
+                    new CardAction { Title = "Adaptive Cards", Value = AdaptiveCard }
+                }
+            }.ToAttachment();
         }
     }
 }
