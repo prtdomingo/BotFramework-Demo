@@ -16,6 +16,8 @@ namespace Cards.Bot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
+            // See https://github.com/Microsoft/BotBuilder-Samples for more examples
+
             context.Wait(MessageReceivedStart);
         }
 
@@ -41,6 +43,7 @@ namespace Cards.Bot.Dialogs
                     context.Call(new StandardCardDialog(), MessageReceivedDone);
                     break;
                 case AdaptiveCard:
+                    context.Call(new AdaptiveCardDialog(), MessageReceivedDone);
                     break;
                 default:
                     await context.PostAsync("Please select either Standard Card or Adaptive Card to proceed");

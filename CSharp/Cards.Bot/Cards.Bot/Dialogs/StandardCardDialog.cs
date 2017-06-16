@@ -91,7 +91,7 @@ namespace Cards.Bot.Dialogs
         {
             var attachmentList = new List<Attachment>();
 
-            for(int i = 1; i <= 10; i++)
+            for(int i = 1; i <= 5; i++)
             {
                 attachmentList.Add(GetHeroCard($"Picture {i}",
                     $"Subtitle - {i}",
