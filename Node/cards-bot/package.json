@@ -1,0 +1,30 @@
+{
+  "name": "cards-bot",
+  "version": "1.0.0",
+  "description": "Demo for Visual Cards Bot",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prtdomingo/BotFramework-Demo.git"
+  },
+  "keywords": [
+    "botframework",
+    "bot",
+    "chatbot"
+  ],
+  "author": "Philip Domingo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prtdomingo/BotFramework-Demo/issues"
+  },
+  "homepage": "https://github.com/prtdomingo/BotFramework-Demo#readme",
+  "dependencies": {
+    "botbuilder": "^3.8.4",
+    "dotenv-extended": "^2.0.1",
+    "microsoft-adaptivecards": "^0.5.6",
+    "restify": "^4.3.0"
+  }
+}
